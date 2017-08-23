@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>客户端工具</title>
+    <link rel="stylesheet" href="style/bootstrap.css">
+    <link rel="stylesheet" href="style/main.css">
+    <script type='text/javascript' src='style/jquery-2.2.1.min.js'></script>
+  </head>
+
+<body>
+<ul class="lead" id="filelsitview" >
+</ul>
+<script type="text/javascript">  
+function getAllCdnFiles(){
+  $("#filelsitview").empty();
+  		$.ajax({
+          type: "GET",
+          url: "cgi-bin/delCdnRes.py",
+          data: "actiontype=getAllCdnFiles",
+          success: function(msg){
+            msg=$.trim(msg)
+            filelist  = msg.split("\n");
+            for (var i = filelist.length - 1; i >= 0; i--) {
+            	lines = filelist[i].split(" ")
+            	$("#filelsitview").append("<li>"+filelist[i]+'<a href="javascript:delfile(\''+lines[lines.length-1]+'\')"  class="btn btn-primary"  id="releaseToWeb">删除'+lines[lines.length-1]+'</a>'+"</li>");
+            }
+          },
+          error:function(){
+            alert( "运行失败" );
+          }
+        });
+}
+function delfile(dirname){
+	if(confirm("确认要删除文件 "+dirname+" 吗？???")){
+        $.ajax({
+          type: "GET",
+          url: "cgi-bin/delCdnRes.py",
+          data: "actiontype=deletefile&filename="+dirname,
+          success: function(msg){
+            getAllCdnFiles();
+          },
+          error:function(){
+            alert( "运行失败" );
+          }
+        });
+
+    }
+}
+$(document).ready(function(){ 
+	getAllCdnFiles();
+});
+</script>
+</body>

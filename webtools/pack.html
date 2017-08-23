@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+ <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>打包工具</title>
+    <link rel="stylesheet" href="style/bootstrap.css">
+    <link rel="stylesheet" href="style/main.css">
+    <script type='text/javascript' src='style/jquery-2.2.1.min.js'></script>
+    <script type='text/javascript' src='style/main.js'></script>
+    <script type='text/javascript' src='style/localetype.js'></script>
+  </head>
+  <body>
+
+    <div id="loading" style=" display: none;filter:alpha(Opacity=80);-moz-opacity:0.5;opacity: 0.5; position: fixed; width: 100%; height: 100%; background-color: rgb(171, 162, 162); z-index: 9999;margin: 0;text-align: center;font-size: 30;"><span class="h1" >运行中，请稍后。。。。 请不要关闭浏览器</span></div>
+    <div>
+      <label>打包配置名 :</label>
+      <select id="confnames"> </select> 
+      <a href="javascript:void(0)" class="btn btn-primary" id="readconf">读取配置</a>
+    </div>
+    <div>
+      <label>dev_or_dis? </label>
+      <select id="dev_or_dis"> 
+        <option value="dev">dev</option> 
+        <option value="dis" selected>dis</option>
+        <option value="adhoc" selected>adhoc</option>
+        <option value="dev|dis">dev&&dis</option>
+      </select> 
+      <a href="javascript:void(0)" class="btn btn-primary" id="generateApp">打包</a>
+    </div>
+    <div>
+      <label>Email addreses:</label>
+      <input type="email" value="dengke@corp.kaixin001.com,sitong@corp.kaixin001.com,shupan@6sring.cn" class="form-control" id="inputEmail" placeholder="输入邮件地址，用','分割。注：腾讯企业邮箱有对外发信数量限制，免费版本500封,对内不限制">
+    </div>
+    <div>
+      <label>微信通知人:</label>
+      <input type="wx" class="form-control" id="inputWX" placeholder="输入wx用户名，用','分割。">
+      <img src="wx.png" alt="alt"/>
+    </div>
+    <div>
+      <label>工程名 :</label>
+      <select id="projectnames"> </select> 
+      <a href="javascript:void(0)" class="btn btn-primary" id="compile">编译</a>
+    </div>
+    <script type="text/javascript"> 
+		function getAllConfName(){
+      $("#loading").show();
+      $.ajax({
+        method: "GET",
+        url: "cgi-bin/pack.py",
+        data: "actiontype=getAllConfName",
+        success: function(data){
+          $("#loading").hide();
+          var confNames = data.split(",");
+          for (var index in confNames){
+            $("#confnames").append("<option value='"+confNames[index]+"'>"+confNames[index]+"</option>");
+          };
+        },
+        error:function(){
+          alert( "get All conf fail" );
+          $("#loading").hide();
+        }
+      })
+		}
+    function getAllProjectNames(){
+      $("#loading").show();
+      $.ajax({
+        method: "GET",
+        url: "cgi-bin/pack.py",
+        data: "actiontype=getAllProjectNames",
+        success: function(data){
+          $("#loading").hide();
+          var projectnames = data.split(",");
+          for (var index in projectnames){
+            $("#projectnames").append("<option value='"+projectnames[index]+"'>"+projectnames[index]+"</option>");
+          };
+        },
+        error:function(){
+          alert( "get All projectName fail" );
+          $("#loading").hide();
+        }
+      })
+    }
+
+    function compile(name){
+      $("#loading").show()
+      $.ajax({
+        method : "GET",
+        url: "cgi-bin/pack.py",
+        data: "actiontype=compile&projectname="+name,
+        success: function(data){
+          $("#loading").hide();
+          console.log(data);
+          Notification.requestPermission(function(status){
+            var n = new Notification("compile:"+name,{body:"finish"})
+          });
+        },
+        error:function(){
+          $("#loading").hide()
+          Notification.requestPermission(function(status){
+            var n = new Notification("compile:"+name,{body:"compile fail"})
+          });
+        }
+      });
+    }
+  
+    function generateApp(name,dev,recivers_email){
+      $("#loading").show()
+      $.ajax({
+        method : "GET",
+        url: "cgi-bin/pack.py",
+        data: "actiontype=generateApp&appname="+name+"&dev="+dev+"&recivers_email="+recivers_email,
+        success: function(data){
+          $("#loading").hide();
+          console.log(data);
+          Notification.requestPermission(function(status){
+            var n = new Notification("generateApp",{body:"finish"})
+          });
+        },
+        error:function(){
+          alert( "generateApp fail" );
+          $("#loading").hide();
+          Notification.requestPermission(function(status){
+            var n = new Notification("generateApp",{body:"fail"})
+          });
+        }
+      });
+    }
+
+    function getConf(name){
+      $("#loading").show()
+      $.ajax({
+              method: "GET",
+              url: "cgi-bin/pack.py",
+              data: "actiontype=getconf&appname="+name,
+              success: function(data){
+                $("#loading").hide();
+								var items = [];
+								data = JSON.parse(data);
+								$.each( data, function( key, val ) {
+									items.push( "<li id='" + key + "'>"+ key +" : " + val + "</li>" );
+								});
+							 
+								$( "<ul/>", {
+									"class": "conf-list",
+									html: items.join( "" )
+								}).appendTo( "body" );
+              },
+              error:function(){
+                alert( "get conf by name fail" );
+                $("#loading").hide();
+              }
+      });
+    }
+  
+    $(document).ready(function(){
+      Notification.requestPermission(function (status) {
+          // 这将使我们能在 Chrome/Safari 中使用 Notification.permission
+          if (Notification.permission !== status) {
+              Notification.permission = status;
+          }
+      });
+			getAllConfName();
+			getAllProjectNames();
+
+      $("#readconf").click(function(){
+        var name = $("#confnames option:selected").val();
+        $(".conf-list").remove();
+        getConf(name);
+      });
+
+      $("#generateApp").click(function(){
+        var name = $("#confnames option:selected").val();
+        var dev= $("#dev_or_dis option:selected").val();
+        var recivers_email = $("#inputEmail").val();
+        if (dev=="dev&&dis"){
+          generateApp(name,"dev",recivers_email);
+          generateApp(name,"dis",recivers_email);
+        }else{
+          generateApp(name,dev,recivers_email);
+        }
+      });
+
+      $("#compile").click(function(){
+        var projectname = $("#projectnames option:selected").val();
+        if (confirm("确定要编译"+projectname)){
+          compile(projectname);
+        }
+      });
+    });
+    </script>  
+  </body>
+</html>

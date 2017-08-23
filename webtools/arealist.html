@@ -1,0 +1,485 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+ <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>客户端工具</title>
+    <link rel="stylesheet" href="style/bootstrap.css">
+    <link rel="stylesheet" href="style/main.css">
+    <script type='text/javascript' src='style/jquery-2.2.1.min.js'></script>
+    <script type='text/javascript' src='style/main.js'></script>
+    <script type='text/javascript' src='style/localetype.js'></script>
+  </head>
+
+<body>
+<div id="loading" style=" display: none;filter:alpha(Opacity=80);-moz-opacity:0.5;opacity: 0.5; position: fixed; width: 100%; height: 100%; background-color: rgb(171, 162, 162); z-index: 9999;margin: 0;text-align: center;font-size: 30;"><span class="h1" >运行中，请稍后。。。。 请不要关闭浏览器<span></span></div>
+<ul class="lead" >
+<li> <select id="serverlistid"> </select> 
+
+  <select id="serverlistidversion"> </select> 
+  <a href="javascript:void(0)" class="btn btn-primary" id="createPlist">读取</a>
+  <a href="javascript:void(0)" class="btn btn-primary" id="addServeritem">另存</a>
+  <a href="javascript:void(0)" class="btn btn-primary" id="saveServeritem">保存</a>
+</li>
+
+<li>
+<div><span>服务器列表:</span><input type="input" style="width:80%" id="serverlist" /></div>
+<div><span>app版本：</span><input type="input" id="appversion" /><span>资源版本：</span><input type="input" id="resversion" /></div>
+<div><span>资源地址:</span><input type="input" style="width:80%" id="resources" /></div>
+<div><span>F值:</span><input type="input" id="fvalue" /></div>
+<div><span>GAMEID:</span><input type="input" id="GAMEID" /></div>
+
+<div><span>中心服地址:</span><input type="input" style="width:80%" id="PASSPORT" /></div>
+<div><span>最近登录服接口地址:</span><input type="input" style="width:80%" id="LASTSERVERURL" /></div>
+<div><span>更新地址:</span><input type="input" style="width:80%" id="UPGRADEURL" /></div>
+<div><span>强制更新:</span><select id="FORCEUPGRADE"><option value="">默认</option>
+<option value="0">否</option><option value="1">是</option></select> </div>
+<div><span>游戏活动公告:</span><input type="input" style="width:80%" id="ACTIVITYNOTICEURL" /></div>
+<div><span>游戏外公告:</span><input type="input" style="width:80%" id="LOGINNOTICEURL" /><a href="javascript:void(0)" class="btn btn-primary" id="editnotice">编辑</a></div>
+<div><span>游戏内公告:</span><input type="input" style="width:80%" id="GAMENNOTICEURL" /><a href="javascript:void(0)" class="btn btn-primary" id="editgamenotice">编辑</a></div>
+
+<div><span>官网:</span><input type="input" style="width:80%" id="OFFICIAL" /></div>
+<div><span>论坛:</span><input type="input" style="width:80%" id="FORUM" /></div>
+<div><span>充值汇报:</span><input type="input" style="width:80%" id="BEFORECHARGE" /></div>
+<div><span>语言:</span><select id="LOCALETYPE">
+<option value="">默认</option>
+<option value="zh_CN">简体中文</option><option value="zh_TW">繁体中文</option><option value="en_US">英文</option><option value="en_US">日文</option></select> </div>
+
+<div><span>平台兑换充值开关:</span><select id="WEBCHARGE"><option value="">默认设置关闭</option>
+<option value="0">关</option><option value="1">开</option></select> </div>
+<div><span>充值货币:</span><input type="input" style="width:80%" id="CHARGECURRENCY" /></div>
+<div><span>充值开关:</span><select id="chargeOpen">
+<option value="0">关</option><option value="1">开</option></select> </div>
+<div><span>充值列表:</span>
+<select id="chargeListType">
+<option value="0">0:页面充值</option>
+<option value="1">1:iOS国内</option>
+<option value="2">2:iOS国内审核</option>
+<option value="10">10:谷歌台湾</option>
+<option value="11">11:国内安卓</option>
+<option value="12">12:应用宝安卓</option>
+<option value="13">13:通用安卓</option>
+<option value="14">14:繁体安卓</option>
+<option value="15">15:繁体</option>
+<option value="16">16:未知</option>
+<option value="17">17:英文</option>
+<option value="18">18:英文</option>
+<option value="19">19:未知</option>
+<option value="20">20:未知</option>
+<option value="21">21:未知</option>
+<option value="22">22:韩文</option>
+<option value="23">23:未知</option>
+<option value="24">24:未知</option>
+<option value="25">25:未知</option>
+<option value="26">26:未知</option>
+<option value="27">27:未知</option>
+</select></div>
+<div><span>兑换比例:</span><input type="input" style="width:80%" id="COINRATE" /></div>
+<div><span>DEBUG开关:</span><select id="USEDEBUG">
+<option value="">默认设置关闭</option>
+<option value="1">开启</option><option value="0">关闭</option></select></div>
+<div><span>SDK开关:</span><select id="USEDSDK">
+<option value="">默认设置</option>
+<option value="0">不使用SDK</option><option value="1">SDK登录</option></select></div>
+<div><span>微信分享:</span><select id="WEI_XIN_SHARE_SWITCH">
+<option value="">默认设置</option>
+<option value="0">关</option><option value="1">开</option></select></div>
+<div><span>评价开关:</span><select id="GO_MARKET_SWITCH">
+<option value="">默认设置</option>
+<option value="0">关</option><option value="1">开</option></select></div>
+
+<div><span>你提我改开关:</span><select id="SHOWOPINION">
+<option value="">默认设置</option>
+<option value="0">关</option><option value="1">开</option></select></div>
+
+<div><span>消费提示:</span><select id="GOLD_COST_CONFIRM">
+<option value="">默认关</option>
+<option value="0">关</option><option value="1">开</option></select></div>
+
+<div><span>随机名字:</span><select id="RANDON_PLAYER_NAME">
+<option value="">默认开</option>
+<option value="0">显示</option><option value="1">隐藏</option></select></div>
+
+<div><span>提审开关:</span><select id="inreview">
+<option value="">默认</option>
+<option value="0">关</option><option value="1">开</option></select></div>
+<div><span>引导开关:</span><select id="guideOpen">
+<option value="">默认</option>
+<option value="0">关</option><option value="1">开</option></select></div>
+<div><span>推送开关:</span><select id="LOCAL_PUSH_SWITCH">
+<option value="">默认</option>
+<option value="0">关</option><option value="1">开</option></select></div>
+<div><span>兵种显示比例:</span><select id="BATTLESOLIDERZOOM">
+<option value="">默认</option>
+<option value="1">正常</option><option value="2">减半</option></select></div>
+<div><span>武将技能喊话:</span><select id="BATTLEHEROSOUND">
+<option value="">默认开启</option><option value="1">开启</option><option value="0">关闭</option></select></div>
+
+<div><span>20连抽确认:</span><select id="SHENJIANG_MAKESURE">
+<option value="">默认关闭</option><option value="1">开启</option><option value="0">关闭</option></select></div>
+
+
+<div><span>自动登录:</span><select id="FORCELOGIN">
+<option value="">默认</option>
+<option value="1">自动登录</option><option value="0">不自动登录</option></select></div>
+
+<div><span>飞流CHANNELID:</span><input type="input" id="FLCHANNELID" /></div>
+<div><span>飞流APPID:</span><input type="input" id="FLAPPID" /></div>
+<div><span>飞流_companyid:</span><input type="input" id="feiliu_companyid" /></div>
+<div><span>飞流coopId:</span><input type="input" style="width:80%" id="feiliu_coopId" /></div>
+
+<div><span>飞流appkey:</span><input type="input" style="width:80%" id="feiliu_appkey" /></div>
+<div><span>日志汇报地址:</span><input type="input" style="width:80%" id="REPORTURL" /></div>
+
+<div><span>日志级别:</span>
+<select id="LOGLEVEL">
+<option value="">默认</option>
+<option value="0">关</option><option value="1">1</option><option value="2">2</option><option value="3">3</option></select></div>
+<div><span>飞流充值回调:</span><input type="input" style="width:80%" id="feiliu_callBackUrl" /></div>
+<div><span>any登录回调:</span><input type="input" style="width:80%" id="an_oauthLoginServer" /></div>
+<div><span>易接充值回调:</span><input type="input" style="width:80%" id="yijie_pay_callBackUrl" /></div>
+<div><span>登录认证地址:</span><input type="input" style="width:80%" id="oauthLoginServer" /></div>
+<div><span>onestoreiap地址:</span><input type="input" style="width:80%" id="onstorecallbackurl" /></div>
+
+<div><span>充值sdk:</span>
+<select id="IAP_TYPE">
+<option value="">默认</option>
+<option value="IAP_TYPE_ANY">anysdk充值</option>
+<option value="IAP_TYPE_GCS">AppStore充值</option>
+<option value="IAP_TYPE_MYCARD_WEB">mycard SDK Web充值</option>
+<option value="IAP_TYPE_NICEPLAY">mycard SDK充值</option>
+<option value="IAP_TYPE_GOOGLE">android Google充值</option>
+<option value="IAP_TYPE_ONESTORE">韩文 ONESTORE 充值</option>
+</select></div>
+
+
+<div><span>充值认证地址：</span><input type="input" style="width:80%" id="notifyUrl" /></div>
+<div><span>充值前检查状态：</span><input type="input" style="width:80%" id="CHARGE_CHECK" /></div>
+
+<div><span>sdk调试模式:</span>
+<select id="feiliu_isDebug"><option value="">默认</option>
+<option value="true">调试</option><option value="false">正式</option></select></div>
+
+<div><span>reyun汇报开关:</span>
+<select id="reyun_switch">
+<option value="">默认</option>
+<option value="0">关闭汇报</option><option value="1">开启汇报</option></select></div>
+<div><span>reyun_appkey:</span><input type="input" style="width:80%" id="reyun_appkey" /></div>
+<div><span>appsflyerdevkey</span><input type="input" style="width:80%" id="appsflyerdevkey" /></div>
+<div><span>APPSFLYER_SWITCH</span><input type="input" style="width:80%" id="APPSFLYER_SWITCH" /></div>
+</li>
+
+</ul>
+
+<script type="text/javascript"> 
+var SERVERSTATUS=     ["关闭" ,"开启"   ,"爆满"  ,"新开"   ,"畅通" ,"推荐"];
+var SERVERSTATUSCOLOR=["gray"  ,"white" ,"red" ,"yellow" , "darkseagreen","green"]
+var SERVERURL=""
+var SERVERXMLDOC
+var SETSTATUS=5
+var SELECTID=""
+var NEXTINDEX = 0
+
+var AREALIST={}
+var SERVERLIST={}
+var VERSION={}
+function getAllArealist(){
+  $("#loading").show()
+  $.ajax({
+          type: "GET",
+          url: "cgi-bin/serverlistutils.py",
+          data: "actiontype=allarealist",
+          success: function(msg){
+            $("#loading").hide()
+            msg=$.trim(msg).replace(/.xml|\*/g,"")
+            var arealists = msg.split("\n")
+            for (var i = arealists.length - 1; i >= 0; i--) {
+              var arealist = arealists[i].split("_")
+              var type = arealist.shift()
+              if("arealist"== type){
+                if(arealist[0]!="" && arealist.length>0){
+                  if(!AREALIST[arealist[0]]){
+                    AREALIST[arealist[0]]=[]
+                    $("#serverlistid").append("<option value='"+arealist[0]+"'>"+arealist[0]+"</option>");
+                  }
+                  var versions = AREALIST[arealist[0]]
+                  versions[versions.length]=arealist[1]
+                }  
+              }else if("serverlist"== type){
+                if(!SERVERLIST[arealist[0]]){
+                  SERVERLIST[arealist[0]]=true
+                }
+              }
+              
+            }
+            changeVersion()
+          },
+          error:function(){
+            alert( "运行失败" );
+            $("#loading").hide()
+          }
+        });
+}
+
+function changeVersion(){
+  var serverlistid = $("#serverlistid option:selected").val()
+  var versions = AREALIST[serverlistid]
+  $("#serverlistidversion").empty()
+  for (var i = 0; i < versions.length ; i++) {
+    $("#serverlistidversion").append("<option value='"+versions[i]+"'>"+versions[i]+"</option>");
+  }
+ 
+}
+function readArealist(callback){
+    $("#loading").show()
+    $.ajax({
+          type: "GET",
+          url: "cgi-bin/serverlistutils.py",
+          data: "actiontype=getarealist&serverlist="+SERVERURL,
+          success: function(msg){
+            var xml = $(msg)
+            xml.each(function(index){
+              var node = xml[index]
+              
+              if("AREAS" == node.nodeName){
+                $("#serverlist").val($(node).find("serverlist").text())
+              }else if("RESOURCES"==node.nodeName){
+                $("#resversion").val($(node).attr("resversion"))
+                $("#appversion").val($(node).attr("appversion"))
+                $("#resources").val($(node).text())
+                
+                console.log($(node).attr("resversion"))
+              }else if("CONFIG"==node.nodeName){
+                $("#fvalue").val($(node).find("fvalue").text())
+                $("#GAMEID").val($(node).find("GAMEID").text())
+                $("#ACTIVITYNOTICEURL").val($(node).find("ACTIVITYNOTICEURL").text())
+                $("#LOGINNOTICEURL").val($(node).find("LOGINNOTICEURL").text())
+                $("#OFFICIAL").val($(node).find("OFFICIAL").text())
+                $("#WEBCHARGE").val($(node).find("WEBCHARGE").text())
+                $("#chargeOpen").val($(node).find("chargeOpen").text())
+                $("#CHARGECURRENCY").val($(node).find("CHARGECURRENCY").text())
+                $("#chargeListType").val($(node).find("chargeListType").text())
+                $("#inreview").val($(node).find("inreview").text())
+                $("#guideOpen").val($(node).find("guideOpen").text())
+                $("#LOCAL_PUSH_SWITCH").val($(node).find("LOCAL_PUSH_SWITCH").text())
+                $("#BATTLESOLIDERZOOM").val($(node).find("BATTLESOLIDERZOOM").text())
+                $("#BATTLEHEROSOUND").val($(node).find("BATTLEHEROSOUND").text())
+                $("#SHENJIANG_MAKESURE").val($(node).find("SHENJIANG_MAKESURE").text())
+                $("#FORUM").val($(node).find("FORUM").text())
+                
+                $("#PASSPORT").val($(node).find("PASSPORT").text())
+                $("#FLCHANNELID").val($(node).find("FLCHANNELID").text())
+                $("#FLAPPID").val($(node).find("FLAPPID").text())
+                $("#LOGLEVEL").val($(node).find("LOGLEVEL").text())
+                $("#REPORTURL").val($(node).find("REPORTURL").text())
+                $("#UPGRADEURL").val($(node).find("UPGRADEURL").text())
+                $("#FORCEUPGRADE").val($(node).find("FORCEUPGRADE").text())
+                $("#LASTSERVERURL").val($(node).find("LASTSERVERURL").text())
+                $("#USEDSDK").val($(node).find("USEDSDK").text())
+                $("#USEDEBUG").val($(node).find("USEDEBUG").text())
+                $("#WEI_XIN_SHARE_SWITCH").val($(node).find("WEI_XIN_SHARE_SWITCH").text())
+                $("#GO_MARKET_SWITCH").val($(node).find("GO_MARKET_SWITCH").text())
+                
+                
+                $("#oauthLoginServer").val($(node).find("oauthLoginServer").text())
+                $("#BEFORECHARGE").val($(node).find("BEFORECHARGE").text())
+                $("#FORCELOGIN").val($(node).find("FORCELOGIN").text())
+                $("#LOCALETYPE").val($(node).find("LOCALETYPE").text())
+                $("#COINRATE").val($(node).find("COINRATE").text())
+                $("#GAMENNOTICEURL").val($(node).find("GAMENNOTICEURL").text())
+                $("#SHOWOPINION").val($(node).find("SHOWOPINION").text())
+                $("#GOLD_COST_CONFIRM").val($(node).find("GOLD_COST_CONFIRM").text())
+                $("#RANDON_PLAYER_NAME").val($(node).find("RANDON_PLAYER_NAME").text())
+                $("#CHARGE_CHECK").val($(node).find("CHARGE_CHECK").text())
+                
+              }else if("SDKCONFIG" == node.nodeName){
+                $("#onstorecallbackurl").val($(node).find("onstorecallbackurl").text())
+                $("#feiliu_coopId").val($(node).find("feiliu_coopId").text())
+                $("#feiliu_companyid").val($(node).find("feiliu_companyid").text())
+                $("#feiliu_appkey").val($(node).find("feiliu_appkey").text())
+                $("#feiliu_callBackUrl").val($(node).find("feiliu_callBackUrl").text())
+                $("#an_oauthLoginServer").val($(node).find("an_oauthLoginServer").text())
+                $("#yijie_pay_callBackUrl").val($(node).find("yijie_pay_callBackUrl").text())
+                $("#feiliu_isDebug").val($(node).find("feiliu_isDebug").text())
+                $("#IAP_TYPE").val($(node).find("IAP_TYPE").text())
+                
+                $("#reyun_switch").val($(node).find("reyun_switch").text())
+                $("#reyun_appkey").val($(node).find("reyun_appkey").text())
+                $("#notifyUrl").val($(node).find("notifyUrl").text())
+                $("#appsflyerdevkey").val($(node).find("appsflyerdevkey").text())
+                $("#APPSFLYER_SWITCH").val($(node).find("APPSFLYER_SWITCH").text())
+                
+                
+              }
+            })
+            
+            
+            
+            $("#loading").hide()
+          },
+          error:function(){
+            alert( "运行失败" );
+            $("#loading").hide()
+          }
+        });
+  }
+  function setserverlist(xmlstring){
+      $("#loading").show()
+     $.ajax({
+          type: "POST",
+          url: "cgi-bin/serverlistutils.py",
+          data: {actiontype:"setarealist",
+                serverlist:SERVERURL,
+                serverdata:xmlstring
+              },
+          success: function(msg){
+            readArealist()
+            alert( "修改成功！" );
+          },
+          error:function(){
+            alert( "运行失败" );
+            $("#loading").hide()
+          }
+        });
+  }
+function formatString(value){
+  if (value && value!="null"){
+    return $.trim(value)
+  }
+  return ""
+}
+function additem(key,value){
+  value=formatString(value)
+  var item = ""
+  if(value!=""){
+    item="\t<"+key+">"+value+"</"+key+">\n"
+  }
+  return item;
+}
+function getAreaData(){
+  var xml = '<?xml version="1.0" encoding="utf-8"?>\n'+
+    '<areas quick="1" >\n'+
+    '\t<area default="1" id="1" name="三国游戏">\n'+
+    '\t\t<serverlist>'+$("#serverlist").val()+'</serverlist>\n'+
+    '\t</area>\n'+
+    '</areas>\n'+
+    '<resources resversion="'+$("#resversion").val()+'" appversion="'+$("#appversion").val()+'">'+$("#resources").val()+'</resources>\n'+
+    '<config>\n'+
+    '\t<fvalue>'+$("#fvalue").val()+'</fvalue>\n'+
+     (formatString($("#GAMEID").val())==""?"":'\t<GAMEID>'+formatString($("#GAMEID").val())+'</GAMEID>\n')+
+     additem("ACTIVITYNOTICEURL",$("#ACTIVITYNOTICEURL").val())+
+    '\t<LOGINNOTICEURL>'+$("#LOGINNOTICEURL").val()+'</LOGINNOTICEURL>\n'+
+    (formatString($("#USEDSDK").val())==""?"":'\t<USEDSDK>'+formatString($("#USEDSDK").val())+'</USEDSDK>\n')+
+    (formatString($("#WEI_XIN_SHARE_SWITCH").val())==""?"":'\t<WEI_XIN_SHARE_SWITCH>'+formatString($("#WEI_XIN_SHARE_SWITCH").val())+'</WEI_XIN_SHARE_SWITCH>\n')+
+     (formatString($("#GO_MARKET_SWITCH").val())==""?"":'\t<GO_MARKET_SWITCH>'+formatString($("#GO_MARKET_SWITCH").val())+'</GO_MARKET_SWITCH>\n')+
+    
+    '\t<OFFICIAL>'+$("#OFFICIAL").val()+'</OFFICIAL>\n'+
+    '\t<FORUM>'+$("#FORUM").val()+'</FORUM>\n'+
+    '\t<chargeOpen>'+$("#chargeOpen").val()+'</chargeOpen>\n'+
+    '\t<chargeListType>'+$("#chargeListType").val()+'</chargeListType>\n'+
+    '\t<inreview>'+$("#inreview").val()+'</inreview>\n'+
+    (formatString($("#guideOpen").val())==""?"":'\t<guideOpen>'+$("#guideOpen").val()+'</guideOpen>\n')+
+    (formatString($("#GAMENNOTICEURL").val())==""?"":'\t<GAMENNOTICEURL>'+$("#GAMENNOTICEURL").val()+'</GAMENNOTICEURL>\n')+
+    (formatString($("#SHOWOPINION").val())==""?"":'\t<SHOWOPINION>'+$("#SHOWOPINION").val()+'</SHOWOPINION>\n')+
+    (formatString($("#LOCAL_PUSH_SWITCH").val())==""?"":'\t<LOCAL_PUSH_SWITCH>'+$("#LOCAL_PUSH_SWITCH").val()+'</LOCAL_PUSH_SWITCH>\n')+
+    (formatString($("#BATTLESOLIDERZOOM").val())==""?"":'\t<BATTLESOLIDERZOOM>'+$("#BATTLESOLIDERZOOM").val()+'</BATTLESOLIDERZOOM>\n')+
+    '\t<oauthLoginServer>'+$("#oauthLoginServer").val()+'</oauthLoginServer>\n'+
+    (formatString($("#LOCALETYPE").val())==""?"":'\t<LOCALETYPE>'+$("#LOCALETYPE").val()+'</LOCALETYPE>\n')+
+    (formatString($("#COINRATE").val())==""?"":'\t<COINRATE>'+$("#COINRATE").val()+'</COINRATE>\n')+
+    (formatString($("#FORCELOGIN").val())==""?"":'\t<FORCELOGIN>'+formatString($("#FORCELOGIN").val())+'</FORCELOGIN>\n')+
+    (formatString($("#BEFORECHARGE").val())==""?"":'\t<BEFORECHARGE>'+formatString($("#BEFORECHARGE").val())+'</BEFORECHARGE>\n')+
+    (formatString($("#PASSPORT").val())==""?"":'\t<PASSPORT>'+formatString($("#PASSPORT").val())+'</PASSPORT>\n')+
+    (formatString($("#FLCHANNELID").val())==""?"":'\t<FLCHANNELID>'+formatString($("#FLCHANNELID").val())+'</FLCHANNELID>\n')+
+    (formatString($("#FLAPPID").val())==""?"":'\t<FLAPPID>'+formatString($("#FLAPPID").val())+'</FLAPPID>\n')+
+    (formatString($("#LOGLEVEL").val())==""?"":'\t<LOGLEVEL>'+$("#LOGLEVEL").val()+'</LOGLEVEL>\n')+
+    (formatString($("#UPGRADEURL").val())==""?"":'\t<UPGRADEURL>'+formatString($("#UPGRADEURL").val())+'</UPGRADEURL>\n')+
+    (formatString($("#FORCEUPGRADE").val())==""?"":'\t<FORCEUPGRADE>'+formatString($("#FORCEUPGRADE").val())+'</FORCEUPGRADE>\n')+
+
+    (formatString($("#LASTSERVERURL").val())==""?"":'\t<LASTSERVERURL>'+formatString($("#LASTSERVERURL").val())+'</LASTSERVERURL>\n')+
+    additem("GOLD_COST_CONFIRM",$("#GOLD_COST_CONFIRM").val())+
+    additem("RANDON_PLAYER_NAME",$("#RANDON_PLAYER_NAME").val())+
+    additem("BATTLEHEROSOUND",$("#BATTLEHEROSOUND").val())+
+    additem("SHENJIANG_MAKESURE",$("#SHENJIANG_MAKESURE").val())+
+    additem("CHARGE_CHECK",$("#CHARGE_CHECK").val())+
+    additem("REPORTURL",$("#REPORTURL").val())+
+    additem("USEDEBUG",$("#USEDEBUG").val())+
+    additem("WEBCHARGE",$("#WEBCHARGE").val())+
+    additem("CHARGECURRENCY",$("#CHARGECURRENCY").val())+
+    
+  '</config>\n'+
+  '<sdkconfig>\n'+
+  
+  (formatString($("#FLAPPID").val())==""?"":'\t<feiliu_appid>'+formatString($("#FLAPPID").val())+'</feiliu_appid>\n')+
+  (formatString($("#IAP_TYPE").val())==""?"":'\t<IAP_TYPE>'+formatString($("#IAP_TYPE").val())+'</IAP_TYPE>\n')+
+  (formatString($("#feiliu_coopId").val())==""?"":'\t<feiliu_coopId>'+formatString($("#feiliu_coopId").val())+'</feiliu_coopId>\n')+
+  (formatString($("#feiliu_companyid").val())==""?"":'\t<feiliu_companyid>'+formatString($("#feiliu_companyid").val())+'</feiliu_companyid>\n')+
+  (formatString($("#feiliu_appkey").val())==""?"":'\t<feiliu_appkey>'+formatString($("#feiliu_appkey").val())+'</feiliu_appkey>\n')+
+  (formatString($("#reyun_appkey").val())==""?"":'\t<reyun_appkey>'+formatString($("#reyun_appkey").val())+'</reyun_appkey>\n')+
+  (formatString($("#reyun_switch").val())==""?"":'\t<reyun_switch>'+formatString($("#reyun_switch").val())+'</reyun_switch>\n')+
+  (formatString($("#jpush_appkey").val())==""?"":'\t<jpush_appkey>'+formatString($("#jpush_appkey").val())+'</jpush_appkey>\n')+
+  (formatString($("#an_oauthLoginServer").val())==""?"":'\t<an_oauthLoginServer>'+formatString($("#an_oauthLoginServer").val())+'</an_oauthLoginServer>\n')+
+  (formatString($("#feiliu_callBackUrl").val())==""?"":'\t<feiliu_callBackUrl>'+formatString($("#feiliu_callBackUrl").val())+'</feiliu_callBackUrl>\n')+
+  (formatString($("#yijie_pay_callBackUrl").val())==""?"":'\t<yijie_pay_callBackUrl>'+formatString($("#yijie_pay_callBackUrl").val())+'</yijie_pay_callBackUrl>\n')+
+  (formatString($("#feiliu_isDebug").val())==""?"":'\t<feiliu_isDebug>'+formatString($("#feiliu_isDebug").val())+'</feiliu_isDebug>\n')+
+  additem("notifyUrl",$("#notifyUrl").val())+
+  additem("appsflyerdevkey",$("#appsflyerdevkey").val())+
+  additem("APPSFLYER_SWITCH",$("#APPSFLYER_SWITCH").val())+
+  additem("onstorecallbackurl",$("#onstorecallbackurl").val())+
+  '</sdkconfig>'
+  return xml
+}
+$(document).ready(function(){
+  var LOCALETYPE=$("#LOCALETYPE")
+  LOCALETYPE.empty()
+  for(var key in LOCALETYPES){
+     LOCALETYPE.append("<option value='"+key+"'>"+LOCALETYPES[key]+"</option>");
+  }
+  
+  getAllArealist()
+  $("#serverlistid").change(changeVersion)
+  $("#createPlist").click(function(){
+    var serverlistid = $("#serverlistid option:selected").val()
+    var serverlistidversion = $("#serverlistidversion option:selected").val()
+    SERVERURL=serverlistid+"_"+serverlistidversion
+    readArealist()
+  })
+  $("#addServeritem").click(function(){
+    var str=prompt("请输入包名和版本号:",SERVERURL);
+    str=formatString(str);
+    if(str!=""){
+        var bid_version = str.split("_")
+        var versions = AREALIST[bid_version[0]];
+        var has = false
+        if(versions){
+            for (var i = versions.length - 1; i >= 0; i--) {
+              if(versions[i]==bid_version[1]){
+                  has = true
+              }
+            }
+        }
+        if(!has || confirm("文件已经存在，你确认要覆盖吗？")){
+          SERVERURL=str;
+          setserverlist(getAreaData());
+        }
+        
+    }
+  })
+  $("#saveServeritem").click(function(){
+    var xml = getAreaData()
+    console.log(xml);
+    if(confirm("确定保存修改么？")){
+      setserverlist(xml)
+    }
+  })
+  $("#editnotice").click(function(){
+    window.open("edit.html?"+$("#LOGINNOTICEURL").val());
+  })
+  $("#editgamenotice").click(function(){
+    window.open("edit.html?"+$("#GAMENNOTICEURL").val());
+  })
+ 
+});
+</script>  
+</body>
+</html>

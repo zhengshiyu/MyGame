@@ -1,0 +1,178 @@
+body {
+  padding-top: 0;
+}
+input{
+  border:0px;
+}
+.footer {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  margin-top: 40px;
+  border-top: 1px solid #eee;
+}
+
+/* Main marketing message and sign up button */
+.jumbotron {
+  text-align: center;
+  background-color: transparent;
+  padding: 0;
+
+}
+.jumbotron img{
+  width: 100%;
+}
+.jumbotron .btn {
+  padding: 14px 24px;
+  font-size: 21px;
+}
+
+/* Customize the nav-justified links to be fill the entire space of the .navbar */
+
+.nav-justified {
+  background-color: #eee;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+}
+.nav-justified > li > a {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  margin-bottom: 0;
+  font-weight: bold;
+  color: #777;
+  text-align: center;
+  background-color: #e5e5e5; /* Old browsers */
+  background-image: -webkit-gradient(linear, left top, left bottom, from(#f5f5f5), to(#e5e5e5));
+  background-image: -webkit-linear-gradient(top, #f5f5f5 0%, #e5e5e5 100%);
+  background-image:      -o-linear-gradient(top, #f5f5f5 0%, #e5e5e5 100%);
+  background-image:         linear-gradient(to bottom, #f5f5f5 0%,#e5e5e5 100%);
+  filter: progid:DXImageTransform.Microsoft.gradient( startColorstr='#f5f5f5', endColorstr='#e5e5e5',GradientType=0 ); /* IE6-9 */
+  background-repeat: repeat-x; /* Repeat the gradient */
+  border-bottom: 1px solid #d5d5d5;
+}
+.nav-justified > .active > a,
+.nav-justified > .active > a:hover,
+.nav-justified > .active > a:focus {
+  background-color: #ddd;
+  background-image: none;
+  -webkit-box-shadow: inset 0 3px 7px rgba(0,0,0,.15);
+          box-shadow: inset 0 3px 7px rgba(0,0,0,.15);
+}
+.nav-justified > li:first-child > a {
+  border-radius: 5px 5px 0 0;
+}
+.nav-justified > li:last-child > a {
+  border-bottom: 0;
+  border-radius: 0 0 5px 5px;
+}
+
+
+.nav-justified {
+  max-height: 52px;
+}
+.nav-justified > li > a {
+  border-right: 1px solid #d5d5d5;
+  border-left: 1px solid #fff;
+}
+.nav-justified > li:first-child > a {
+  border-left: 0;
+  border-radius: 5px 0 0 5px;
+}
+.nav-justified > li:last-child > a {
+  border-right: 0;
+  border-radius: 0 5px 5px 0;
+}
+.text-muted{
+  font-weight: bold;
+  font-size: 16px;
+  margin-left: 30px;
+}
+.col-lg-4>div{
+  display: block;
+  overflow: hidden;
+  height: 210px;
+  margin-bottom: 20px;
+  text-overflow: ellipsis;
+}
+.lead{
+  text-align: left;
+}
+.lead >li{
+  height: 50px;
+}
+/* ----------------------------------- 表格 ----------------------------------- */
+
+table.dataintable {
+  margin-top:10px;
+  border-collapse:collapse;
+  border:1px solid #aaa;
+  width:100%;
+  }
+
+table.dataintable th {
+  vertical-align:baseline;
+  padding:5px 15px 5px 6px;
+  background-color:#d5d5d5;
+  border:1px solid #aaa;
+  text-align:left;
+  }
+
+table.dataintable td {
+  vertical-align:text-top;
+  padding:6px 15px 6px 6px;
+  background-color:#efefef;
+  border:1px solid #aaa;
+  }
+
+table.dataintable pre {
+  width:auto;
+  margin:0;
+  padding:0;
+  border:0;
+  background-color:transparent;
+  }
+
+table.dataintable p {margin:0 0 2px 0;}
+
+div#maincontent table.dataintable ul, div#maincontent table.dataintable li {
+  list-style-type:none;
+  margin:0;
+  padding:0;
+  }
+
+table.dataintable td em
+    {
+    color:#0000ff;
+    font-weight:normal;
+    }
+  
+table.dataintable .table_value {color:#0F93D2;}
+
+.no_wrap {white-space:nowrap;}
+
+div#maincontent table.dataintable ul.listintable {
+  margin:20px;
+  padding:0;
+  }
+
+div#maincontent table.dataintable ul.listintable  li{
+  list-style-type:disc;
+  }
+
+
+table.dataintable td.html5_new {
+  background: #EFEFEF url(/i/table_bg_html5.gif) top right no-repeat;
+  }
+
+tr.notsupported {
+  color:#999999;
+  }
+
+.note span
+{
+font-weight: bold;
+}
+.tip span
+{
+  font-weight: bold;
+  color:#ff9955;
+}

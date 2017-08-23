@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>客户端工具</title>
+    <link rel="stylesheet" href="style/bootstrap.css">
+    <link rel="stylesheet" href="style/main.css">
+    <script type='text/javascript' src='style/jquery-2.2.1.min.js'></script>
+  </head>
+
+<body>
+<div id="loading" style=" display: none;filter:alpha(Opacity=80);-moz-opacity:0.5;opacity: 0.5; position: fixed; width: 100%; height: 100%; background-color: rgb(171, 162, 162); z-index: 9999;margin: 0;text-align: center;font-size: 30;"><span class="h1" >运行中，请稍后。。。。 请不要关闭浏览器<span></span></div>
+<ul class="lead" >
+<li> <select id="serverlistid"> </select> 
+
+  <select id="serverlistidversion"> </select> 
+  <a href="javascript:void(0)" class="btn btn-primary" id="createPlist">读取</a>
+  <a href="javascript:void(0)" class="btn btn-primary" id="addServeritem">添加</a>
+  <a href="javascript:void(0)" class="btn btn-primary" id="saveServeritem">保存</a>
+</li>
+
+<li id="serverlist" >
+
+</li>
+
+</ul>
+
+<script type="text/javascript"> 
+var SERVERSTATUS=     ["关闭" ,"开启"   ,"爆满"  ,"新开"   ,"畅通" ,"推荐"];
+var SERVERSTATUSCOLOR=["gray"  ,"white" ,"red" ,"yellow" , "darkseagreen","green"]
+var SERVERURL=""
+var SERVERXMLDOC
+var SETSTATUS=5
+var SELECTID=""
+var NEXTINDEX = 0
+var AREALIST={}
+var SERVERLIST={}
+var VERSION={}
+function getAllArealist(){
+  $("#loading").show()
+  $.ajax({
+          type: "GET",
+          url: "cgi-bin/serverlistutilstw.py",
+          data: "actiontype=allarealist",
+          success: function(msg){
+            $("#loading").hide()
+            msg=$.trim(msg).replace(/.xml|\*/g,"")
+            var arealists = msg.split("\n")
+            for (var i = arealists.length - 1; i >= 0; i--) {
+              var arealist = arealists[i].split("_")
+              var type = arealist.shift()
+              if("arealist"== type){
+                if(arealist[0]!="" && arealist.length>0){
+                  if(!AREALIST[arealist[0]]){
+                    AREALIST[arealist[0]]=[]
+                    $("#serverlistid").append("<option value='"+arealist[0]+"'>"+arealist[0]+"</option>");
+                  }
+                  var versions = AREALIST[arealist[0]]
+                  versions[versions.length]=arealist[1]
+                }  
+              }else if("serverlist"== type){
+                if(!SERVERLIST[arealist[0]]){
+                  SERVERLIST[arealist[0]]=true
+                }
+              }
+              
+            }
+            changeVersion()
+          },
+          error:function(){
+            alert( "运行失败" );
+            $("#loading").hide()
+          }
+        });
+}
+
+function changeVersion(){
+  var serverlistid = $("#serverlistid option:selected").val()
+  var versions = AREALIST[serverlistid]
+  $("#serverlistidversion").empty()
+  for (var i = 0; i <versions.length ; i++) {
+    $("#serverlistidversion").append("<option value='"+versions[i]+"'>"+versions[i]+"</option>");
+  }
+}
+
+function setbackground(){
+    $("#serverlist").find("div").each(function(i){
+      $(this).css("background-color",SERVERSTATUSCOLOR[$(this).find("#serverstatus").val()]); 
+      $(this).find("input").css("background-color",SERVERSTATUSCOLOR[$(this).find("#serverstatus").val()]); 
+    })
+  }
+function serverStatusChange(selected){
+
+  if($(selected).val()==5){
+    $("#serverlist").find("div #serverstatus").each(function(i){
+      if(selected!=this){
+        var status =  $(this).val()
+        if(status==5){
+          $(this).val(1)
+        }
+      }
+    })
+    
+  }
+  setbackground()
+}
+$(document).ready(function(){ 
+ 
+  getAllArealist()
+  $("#serverlistid").change(changeVersion)
+  function readserverlist(callback){
+     $("#loading").show()
+    $.ajax({
+          type: "GET",
+          url: "cgi-bin/serverlistutilstw.py",
+          data: "actiontype=getserverlist&serverlist="+SERVERURL,
+          success: function(msg){
+            
+            SERVERXMLDOC = $(msg);
+            var serverlistDIV  = $("#serverlist")
+            serverlistDIV.empty()
+            SERVERXMLDOC.find("GameServer").each(function(i){
+              var selectindex = 0
+                  var serverindex = $(this).attr("index")
+                  var snameid = $(this).attr("id")
+                  if (!serverindex){
+                    serverindex = snameid
+                  }
+                  var sname = $(this).attr("name")
+                  var status = 1*$(this).attr("status")
+                  var ip = $(this).attr("ip")
+                  var port = $(this).attr("port")
+                  var selectStr=""
+                  for (var  y = SERVERSTATUS.length - 1; y >= 0; y--) {
+                    if(status==y){
+                      selectStr+='<option selected="true" value="'+y+'">'+SERVERSTATUS[y]+'</option>'
+                    }else{
+                      selectStr+='<option value="'+y+'">'+SERVERSTATUS[y]+'</option>'
+                    }
+                    
+                  }
+                  serverlistDIV.append('<div><span>服务器index:</span><input id="serverindex" style="width:80px;" type="input" value="'+serverindex+'" /><span>--服务器id:</span><input id="serverid" style="width:80px;" type="input" value="'+snameid+'" /><span>--服务器名:</span><input type="input" id="servername" value="'+sname+'" /><span>--服务器域名:</span><input id="serverip" type="input" value="'+ip+'"  /><span>--服务器端口:</span><input type="input" style="width:80px;" id="serverport" value="'+port+'"/><span>--服务器状态:</span><select id="serverstatus"  onchange="serverStatusChange(this)" > '+selectStr+'</select></div>')
+                  
+              NEXTINDEX = i  
+            })
+            if(callback){
+              callback()
+            }
+            setbackground()
+            $("#loading").hide()
+          },
+          error:function(){
+            alert( "运行失败" );
+            $("#loading").hide()
+          }
+        });
+  }
+  function setserverlist(xmlstring){
+      $("#loading").show()
+     $.ajax({
+          type: "POST",
+          url: "cgi-bin/serverlistutilstw.py",
+          data: "actiontype=setserverlist&serverlist="+SERVERURL+"&serverdata="+xmlstring,
+          success: function(msg){
+            readserverlist()
+          },
+          error:function(){
+            alert( "运行失败" );
+            $("#loading").hide()
+          }
+        });
+  }
+  $("#createPlist").click(function(){
+    var serverlistid = $("#serverlistid option:selected").val()
+    var serverlistidversion = $("#serverlistidversion option:selected").val()
+    SERVERURL=serverlistid+"_"+serverlistidversion
+    SELECTID=""
+    readserverlist()
+  })
+
+  $("#addServeritem").click(function(){
+      var serverlistDIV  = $("#serverlist")
+      var serverlist = serverlistDIV.find("div")
+      if(serverlist.length>0){
+        var selectStr=""
+        for (var  y = SERVERSTATUS.length - 1; y >= 0; y--) {
+            if(0==y){
+              selectStr+='<option selected="true" value="'+y+'">'+SERVERSTATUS[y]+'</option>'
+            }else{
+              selectStr+='<option value="'+y+'">'+SERVERSTATUS[y]+'</option>'
+            }
+            
+        }
+        serverlistDIV.prepend('<div><span>服务器index:</span><input id="serverindex" style="width:80px;" /><span>--<span>服务器id:</span><input id="serverid" style="width:80px;" type="input" /><span>--服务器名:</span><input type="input" id="servername" /><span>--服务器域名:</span><input id="serverip"  type="input" /><span>--服务器端口:</span><input id="serverport" style="width:80px;" type="input" value="8080"/><span>--服务器状态:</span><select id="serverstatus" onchange="serverStatusChange(this)"> '+selectStr+'</select></div>')
+      }else{
+        alert("请先点击读取列表")
+      }
+      
+  })
+
+  $("#saveServeritem").click(function(){
+    var GameServers = '<?xml version="1.0" encoding="utf-8"?>\r\n<GameServers>\r\n'
+    var defaultindex = 0
+    var serverlist = $("#serverlist").find("div")
+    if(serverlist.length>0){
+      serverlist.each(function(i){
+          if($(this).find("#serverstatus").val()==5){
+            defaultindex = i;
+          }
+      })
+      serverlist.each(function(i){
+        var serveritem =  $(this)
+        var serverid = $.trim(serveritem.find("#serverid").val())
+        if(serverid!=""){
+          GameServers+='<GameServer default="'+(defaultindex==i?1:0)+'" '+
+          'id="'+serverid+
+          '" index="'+serveritem.find("#serverindex").val()+
+          '" status="'+serveritem.find("#serverstatus").val()+
+          '" port="'+$.trim(serveritem.find("#serverport").val())+
+          '" name="'+$.trim(serveritem.find("#servername").val())+
+          '" ip="'+$.trim(serveritem.find("#serverip").val())+'" />\r\n'
+        }
+      })
+      GameServers+='</GameServers>'
+      if(confirm("确定保存修改么？")){
+        setserverlist(GameServers)
+      }
+    }else{
+      alert("请先点击读取列表")
+    }
+  })
+ 
+});
+</script>  
+</body>
+</html>

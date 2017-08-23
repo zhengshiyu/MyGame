@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<areas quick="1" >
+    <area default="1" id="1" name="三国游戏">
+        <serverlist>http://sg.weunitgame.com/serverlist/serverlist_{BundleID}_{serverlist}.xml</serverlist>
+    </area>
+</areas>
+<resources resversion="{resversion}" appversion="{appversion}">http://cdn.feidou.com/sgqy</resources>
+<config>
+	<OFFICIAL></OFFICIAL>
+	<FORUM></FORUM>
+	<LOGINNOTICEURL>http://27.131.221.168/serverlist/res/html/index.html</LOGINNOTICEURL>
+	<chargeOpen>1</chargeOpen>
+	<chargeListType>1</chargeListType>
+	<inreview>0</inreview>
+	<guideOpen>1</guideOpen>
+	<FVALUE>000000</FVALUE>
+	<LOCAL_PUSH_SWITCH>1</LOCAL_PUSH_SWITCH>
+	<LOGLEVEL>2</LOGLEVEL>
+</config>

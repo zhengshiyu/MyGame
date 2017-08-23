@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>客户端工具</title>
+    <link rel="stylesheet" href="style/bootstrap.css">
+    <link rel="stylesheet" href="style/main.css">
+    <script type='text/javascript' src='style/jquery-2.2.1.min.js'></script>
+  </head>
+
+<body>
+<div id="loading" style=" display: none; position: fixed; width: 100%; height: 100%; background-color: rgb(171, 162, 162); z-index: 9999;margin: 0;text-align: center;font-size: 30;"><span class="h1" >运行中，请稍后。。。。 请不要关闭浏览器<span></span></div>
+<ul class="lead" >
+<li> <select id="excelTosqliteVersion"> </select> <a href="javascript:void(0)"  class="btn btn-primary"  id="excelTosqlite">生成配置表</a>
+</li>
+
+<li>
+  <select id="cocosstudioeVersion"> </select> <a href="javascript:void(0)" class="btn btn-primary" id="cocosstudioTolua">生成cocosstudio界面</a>
+</li>
+<li> <select id="getcsdtxt"> </select> <a href="javascript:void(0)"  class="btn btn-primary"  id="getcsdtxtbtn">提取界面多语言</a>
+</li>
+<li> <select id="getluatxt"> </select> <a href="javascript:void(0)"  class="btn btn-primary"  id="getluatxtbtn">提取客户端多语言</a>
+</li>
+<li>
+  <select id="createPlistVersion"> </select> <a href="javascript:void(0)" class="btn btn-primary" id="createPlist">合并序列图</a>
+</li>
+<li>
+  <select id="releaseToWebVersion"> </select> <a href="javascript:void(0)"  class="btn btn-primary"  id="releaseToWeb">一键发布外网资源</a>
+</li>
+
+<li>
+    <select id="releaseToWebResVersion"> </select> <a href="javascript:void(0)"  class="btn btn-primary"  id="releaseToWebRes">单独发布外网资源</a>
+</li>
+</ul>
+
+<script type="text/javascript">  
+$(document).ready(function(){ 
+  var svn_versions=[["none","请选择版本"],
+                    ["trunk","trunk"],
+                    ["branches/1.2.0","branches/1.2.0"],
+                    ["branches/1.3.0","branches/1.3.0"],
+                    ["branches/1.4.0","branches/1.4.0"],
+                    ["branches/1.5.0","branches/1.5.0"],
+                    ["tags/1.5.0.41","tags/1.5.0.41"],
+                    ["branches/1.6.0","branches/1.6.0"],
+                    ["branches/1.7.0","branches/1.7.0"],
+                    ["branches/1.8.0","branches/1.8.0"],
+                    ["branches/1.9.0","branches/1.9.0"],
+                    ["branches/1.10.0","branches/1.10.0"],
+                    ["branches/1.11.0","branches/1.11.0"]
+                    ]
+  for (var i = 0; i<svn_versions.length; i++) {
+    $("#cocosstudioeVersion").append("<option value='"+svn_versions[i][0]+"'>"+svn_versions[i][1]+"</option>");
+    $("#excelTosqliteVersion").append("<option value='"+svn_versions[i][0]+"'>"+svn_versions[i][1]+"</option>");
+    $("#createPlistVersion").append("<option value='"+svn_versions[i][0]+"'>"+svn_versions[i][1]+"</option>");
+    $("#getcsdtxt").append("<option value='"+svn_versions[i][0]+"'>"+svn_versions[i][1]+"</option>");
+    $("#getluatxt").append("<option value='"+svn_versions[i][0]+"'>"+svn_versions[i][1]+"</option>");
+    $("#releaseToWebResVersion").append("<option value='"+svn_versions[i][0]+"'>"+svn_versions[i][1]+"</option>");
+  }
+  var app_versions=[["none","请选择版本"],
+                    ["inhousezq9","三国群英传9"],
+                    ["appTW","繁体三国群英传7"],
+                    ["app180","三国群英传71.8.0"],
+                    ["app170","三国群英传71.7.0"],
+                    ["app160","三国群英传71.6.0"],
+                    ["app150","三国群英传71.5.0"],
+                    ["app140","三国群英传71.4.0"],
+                    ["app130","三国群英传1.3.0"],
+                    ["testappstore","三国群英传-appstore测试"],
+                    ["FLtestappstore","三国群英传FL-appstore测试"]
+                  ]
+  for (var i = 0; i<app_versions.length; i++) {
+    
+    $("#releaseToWebVersion").append("<option value='"+app_versions[i][0]+"'>"+app_versions[i][1]+"</option>");
+  }
+
+  $.ajaxSetup({cache:false})
+  $("#excelTosqlite").click(function(){ 
+    var excelTosqliteVersion = $("#excelTosqliteVersion option:selected").val()
+    if (excelTosqliteVersion=="none"){
+        alert("请选择要发布的版本")
+        $("#excelTosqliteVersion").focus()
+    }else if (confirm("确定要生成 "+ $("#excelTosqliteVersion option:selected").text()+" 客户端配置文件？") ) {
+        $("#loading").show()
+        $.ajax({
+          type: "GET",
+          url: "cgi-bin/excelTosqlite.py",
+          data: "cversion="+excelTosqliteVersion,
+          success: function(msg){
+            alert( "运行结果: " + msg );
+            $("#loading").hide()
+          },
+          error:function(){
+            alert( "运行失败" );
+            $("#loading").hide()
+          }
+        });
+    }
+  });
+
+  $("#createPlist").click(function(){ 
+    var createPlistVersion = $("#createPlistVersion option:selected").val()
+    if (createPlistVersion=="none"){
+        alert("请选择要发布的版本")
+        $("#createPlistVersion").focus()
+    }else if (confirm("确定要生成 "+ $("#createPlistVersion option:selected").text()+" 客户端 plist 文件？") ) {
+        $("#loading").show()
+        $.ajax({
+          type: "GET",
+          url: "cgi-bin/createPlist.py",
+          data: "cversion="+createPlistVersion,
+          success: function(msg){
+            alert( "运行结果: " + msg );
+            $("#loading").hide()
+          },
+          error:function(){
+            alert( "运行失败" );
+            $("#loading").hide()
+          }
+        });
+    }
+  });
+
+  $("#releaseToWeb").click(function(){ 
+    var excelTosqliteVersion = $("#releaseToWebVersion option:selected").val()
+    var localetype = "zh_CN"
+    if (excelTosqliteVersion=="none"){
+        alert("请选择要发布的版本")
+        $("#releaseToWebVersion").focus()
+    }else if (confirm("确定要生成 "+ $("#releaseToWebVersion option:selected").text()+" 客户端资源？") ) {
+        $("#loading").show()
+        $.ajax({
+          type: "GET",
+          url: "cgi-bin/quickReleaseToWeb.py",
+          data: "arealist=true&isquick=true&cversion="+excelTosqliteVersion+"&localetype="+localetype,
+          success: function(msg){
+            alert( "运行结果: " + msg );
+            $("#loading").hide()
+          },
+          error:function(){
+            alert( "运行失败" );
+            $("#loading").hide()
+          }
+        });
+    }
+  });
+
+  $("#releaseToWebRes").click(function(){ 
+    var excelTosqliteVersion = $("#releaseToWebResVersion option:selected").val()
+    var localetype =  "zh_CN"
+    if (excelTosqliteVersion=="none"){
+        alert("请选择要发布的版本")
+        $("#releaseToWebResVersion").focus()
+    }else if (confirm("确定要生成 "+ $("#releaseToWebResVersion option:selected").text()+" 客户端资源？") ) {
+        $("#loading").show()
+        $.ajax({
+          type: "GET",
+          url: "cgi-bin/quickReleaseToWeb.py",
+          data: "arealist=false&isquick=false&cversion="+excelTosqliteVersion+"&localetype="+localetype,
+          success: function(msg){
+            alert( "运行结果: " + msg );
+            $("#loading").hide()
+          },
+          error:function(){
+            alert( "运行失败" );
+            $("#loading").hide()
+          }
+        });
+    }
+  });
+
+    $("#cocosstudioTolua").click(function(){ 
+    var excelTosqliteVersion = $("#cocosstudioeVersion option:selected").val()
+    if (excelTosqliteVersion=="none"){
+        alert("请选择要发布的版本")
+        $("#cocosstudioeVersion").focus()
+    }else if (confirm("确定要生成 "+ $("#cocosstudioeVersion option:selected").text()+" 界面？") ) {
+        $("#loading").show()
+        $.ajax({
+          type: "GET",
+          url: "cgi-bin/cocosstudioTolua.py",
+          data: "cversion="+excelTosqliteVersion,
+          success: function(msg){
+            alert( "请手动发布 复制csb 运行结果: " + msg );
+            $("#loading").hide()
+          },
+          error:function(){
+            alert( "运行失败" );
+            $("#loading").hide()
+          }
+        });
+    }
+  });
+
+  $("#getcsdtxtbtn").click(function(){
+    var getcsdtxtVersion = $("#getcsdtxt option:selected").val()
+    if (getcsdtxtVersion=="none"){
+        alert("请选择要发布的版本")
+        $("#getcsdtxt").focus()
+    }else if (confirm("确定要提交界面多语言： "+ getcsdtxtVersion) ) {
+        $("#loading").show()
+        $.ajax({
+          type: "GET",
+          url: "cgi-bin/getCsdText.py",
+          data: "cversion="+getcsdtxtVersion,
+          success: function(msg){
+            alert( "生成成功，请重新翻译" );
+            $("#loading").hide()
+          },
+          error:function(){
+            alert( "运行失败" );
+            $("#loading").hide()
+          }
+        });
+    }
+  })
+
+  $("#getluatxtbtn").click(function(){
+    var getcsdtxtVersion = $("#getluatxt option:selected").val()
+    if (getcsdtxtVersion=="none"){
+        alert("请选择要发布的版本")
+        $("#getluatxt").focus()
+    }else if (confirm("确定要提交lua多语言： "+ getcsdtxtVersion) ) {
+        $("#loading").show()
+        $.ajax({
+          type: "GET",
+          url: "cgi-bin/changeLua.py",
+          data: "cversion="+getcsdtxtVersion,
+          success: function(msg){
+            alert( "生成成功，请重新翻译" );
+            $("#loading").hide()
+          },
+          error:function(){
+            alert( "运行失败" );
+            $("#loading").hide()
+          }
+        });
+    }
+  })
+
+});
+</script>  
+</body>
+</html>

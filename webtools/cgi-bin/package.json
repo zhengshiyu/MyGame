@@ -1,0 +1,15 @@
+{
+  "devDependencies": {
+    "chokidar": "~1.5.2",
+    "ini": "~1.3.4"
+  },
+  "name": "watch",
+  "version": "1.0.0",
+  "description": "a simple watchdog",
+  "main": "watch.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "imbahom",
+  "license": "ISC"
+}
